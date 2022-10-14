@@ -75,7 +75,8 @@ config:
   #       by default. (FACT CHECK)
   user.user-data: |
     #cloud-config
-    # The above comment is strictly necessary! Without it, cloud-init won't pick up your configuration
+    # The above comment is strictly necessary! Without it, cloud-init
+    #     won't pick up your configuration
 
     # This just runs `apt update && apt upgrade -y`
     package_upgrade: true
