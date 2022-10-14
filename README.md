@@ -1,4 +1,12 @@
 # LXD: An Opinionated Primer
+
+* [Getting Started](#getting-started)
+* [Remotes](#remotes)
+* [Profiles (Annotated)](#profiles-(annotated))
+  * [Profile as Root](#profile-as-root)
+  * [Profile as a Non-root User](#profile-as-a-non-root-user)
+* [Aliases](#aliases)
+
 ## Getting Started
 ```sh
 sudo snap install lxd
