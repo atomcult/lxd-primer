@@ -91,8 +91,9 @@ config:
       - squashfuse
       - kitty-terminfo
 
-    # These commands will be run (as root).
-    # Since we intend to be root with this profile, this should almost exclusively be fine.
+    # These commands will be run (as root). Since we intend to be root
+    #     with this profile, this should almost exclusively be fine. If
+    #     you need to run a command as a non-root user, you can use `sudo -u <user>`
     runcmd:
       - [chsh, -s, /bin/fish]
       - [snap, install, starship]
