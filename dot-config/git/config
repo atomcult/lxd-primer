@@ -1,0 +1,35 @@
+[user]
+    name = jmbrock
+    email = joseph.brock@canonical.com
+    signingkey = F3D35BB657599D08
+[push]
+    default = simple
+[alias]
+    hist = log --pretty=format:\"%h %ad | %s%d [%an]\" --graph --date=short
+    br = branch
+    ch = checkout
+    cm = commit
+    mr = merge
+    ft = fetch
+    ps = push
+    h = help
+    df = diff
+    st = status
+    a = add .
+    cl = clone
+    t = tag
+    sh = show
+    l = log
+    sw = switch
+    tar = !git archive --format=tar.xz -o `git rev-parse --abbrev-ref HEAD`-`git rev-parse --short HEAD`.tar.xz HEAD
+[tar "tar.xz"]
+    command = xz -c
+[filter "lfs"]
+    smudge = git-lfs smudge -- %f
+    process = git-lfs filter-process
+    required = true
+    clean = git-lfs clean -- %f
+[pull]
+    ff = only
+[init]
+	defaultBranch = main
