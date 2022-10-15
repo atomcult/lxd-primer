@@ -3,6 +3,7 @@
 * [Getting Started](#getting-started)
 * [Remotes](#remotes)
 * [Profiles (Annotated)](#profiles-(annotated))
+  * [Basics](#basics)
   * [Profile as Root](#profile-as-root)
   * [Profile as a Non-root User](#profile-as-a-non-root-user)
 * [Aliases](#aliases)
@@ -56,6 +57,41 @@ lxc remote ls
 ```
 
 ## Profiles (Annotated)
+
+Profiles allow you to set up a container with a default set of instance configuration values as if you had set them manually with `lxd config ...`. As such, any configuration that can be set through the `lxd config` facilities also works with profiles. Additionally, `cloud-init` allows for first-time setup when the container is created.
+
+For more information about configuring profiles, refer to the following documents. There are *many, many* things that can be configured that are not touched upon in this primer.
+ - [LXD Profile Configuration Docs](https://linuxcontainers.org/lxd/docs/master/profiles/)
+ - [LXD Instance Configuration Docs](https://linuxcontainers.org/lxd/docs/master/instances/)
+ - [LXD cloud-init Docs](https://linuxcontainers.org/lxd/docs/master/cloud-init/)
+
+### Basics
+
+To create a profile you can either create a new one from scratch
+```
+lxc profile create <profile>
+```
+
+or copy from an already existing profile.
+```
+lxc profile copy <profile> <new-profile>
+```
+
+Once created, a profile has can be set or viewed one property at a time, but it's usually easier to edit the entire YAML configuration with
+```
+lxc profile edit <profile>
+```
+
+You can verify your work with
+```
+lxc profile show <profile>
+```
+
+The profile can now be used when launching an instance (potentially in combination with others):
+```
+lxc launch ubuntu:22.04 -p <profile>[,<profile-2>,...] <container-name>
+```
+
 ### Profile as Root
 ```yaml
 config:
@@ -150,8 +186,6 @@ devices:
     readonly: "true"
     source: /home/jbrock/.ssh
     type: disk
-
-### You shouldn't touch anything below this line, it's all managed by LXD ###
 
 name: snapcraft
 used_by: []
@@ -253,3 +287,10 @@ Now we can get a non-root shell with (for those containers that have a user name
 ```
 lxc sh <container>
 ```
+
+# To Do
+ - [ ] Add specific examples for LXD setups
+   - [ ] Docker in an LXD container
+   - [ ] microk8s in an LXD container
+   - [ ] X display in an LXD container
+   - [ ] Wayland in an LXD container
