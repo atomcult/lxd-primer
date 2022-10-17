@@ -247,7 +247,7 @@ description: Snapcraft 7 Build Container
 devices:
   dot-config:
     path: /home/jbrock/.config
-    source: /home/jbrock/.local/share/lxd/build
+    source: /home/jbrock/.local/share/lxd/nonroot
     type: disk
   eth0:
     name: eth0
@@ -271,7 +271,7 @@ devices:
     source: /home/jbrock/.ssh/
     type: disk
 
-name: build
+name: nonroot
 used_by: []
 ```
 
