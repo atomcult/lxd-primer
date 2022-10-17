@@ -1,10 +1,21 @@
 "$schema" = 'https://starship.rs/config-schema.json'
 
 add_newline = true
-format = """ $all λ """
+format = '[\[LXD\]](bold) $all λ ''
 right_format = "$character"
 
 [character]
 success_symbol = '[\[I\]](bold green)'
 error_symbol = '[\[I\]](bold red)'
 vicmd_symbol = '[\[N\]](bold cyan)'
+
+[username]
+show_always = true
+style_user = "bold blue"
+format = "[$user]($style)@"
+
+[hostname]
+ssh_only = false
+
+[container]
+disabled = true
