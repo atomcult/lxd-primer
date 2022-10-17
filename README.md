@@ -135,10 +135,11 @@ config:
     #   equivalent packages in that distribution.
     packages:
       - fish
-      - tree
       - git
-      - squashfuse
       - kitty-terminfo
+      - nnn
+      - squashfuse
+      - tree
 
     # These commands will be run (as root). Since we intend to be root
     #     with this profile, this should almost exclusively be fine. If
@@ -218,10 +219,11 @@ config:
     package_upgrade: true
     packages:
       - fish
-      - tree
       - git
-      - squashfuse
       - kitty-terminfo
+      - nnn
+      - squashfuse
+      - tree
     runcmd:
       # Make sure our new user owns their home directory
       - [chown, jbrock:jbrock, /home/jbrock]
