@@ -92,6 +92,11 @@ The profile can now be used when launching an instance (potentially in combinati
 lxc launch ubuntu:22.04 -p <profile>[,<profile-2>,...] <container-name>
 ```
 
+If your profile includes cloud-init, it will take extra time for everything to be setup, since it is run after the container is initialized. You can check the console output with the following command (^a q to exit):
+```
+lxc console <container-name>
+```
+
 ### Profile as Root
 ```yaml
 config:
