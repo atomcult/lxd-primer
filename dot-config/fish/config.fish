@@ -7,6 +7,10 @@ starship init fish | source
 # Disable the fish greeting
 set -gx fish_greeting
 
+# Setup the default editor
+set -gx EDITOR vim
+set -gx VISUAL "$EDITOR"
+
 # Tell Snapcraft to build inside the LXD container
 set -gx SNAPCRAFT_BUILD_ENVIRONMENT host
 
