@@ -134,10 +134,12 @@ config:
     #   distribution, from my understanding, these should be translated to the
     #   equivalent packages in that distribution.
     packages:
+      - fd-find
       - fish
       - git
       - kitty-terminfo
       - nnn
+      - ripgrep
       - squashfuse
       - tree
 
@@ -218,10 +220,12 @@ config:
     #cloud-config
     package_upgrade: true
     packages:
+      - fd-find
       - fish
       - git
       - kitty-terminfo
       - nnn
+      - ripgrep
       - squashfuse
       - tree
     runcmd:
