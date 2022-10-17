@@ -12,6 +12,9 @@ alias less "less --ignore-case --RAW-CONTROL-CHARS"
 # Disable the fish greeting
 set -gx fish_greeting
 
+# Add scripts path
+set -gx --append PATH "$HOME/.config/bin"
+
 # Setup the defaults
 set -gx EDITOR vim
 set -gx VISUAL $EDITOR
