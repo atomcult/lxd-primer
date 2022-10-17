@@ -223,6 +223,8 @@ config:
       - squashfuse
       - kitty-terminfo
     runcmd:
+      # Make sure our new user owns their home directory
+      - [chown, jbrock:jbrock, /home/jbrock]
       - [snap, install, starship]
       - [snap, install, --channel=latest/edge, snapcraft, --classic]
       # - [snap, set, system, experimental.parallel-instances=true]
