@@ -290,7 +290,6 @@ lxc sh <container>
 
 # To Do
  - [ ] Add specific examples for LXD setups
-   - [ ] Docker in an LXD container
    - [ ] microk8s in an LXD container
    - [ ] X display in an LXD container
    - [ ] Wayland in an LXD container
