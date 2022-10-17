@@ -38,7 +38,7 @@ set expandtab
 
 " Set up persistent undo
 if has('persistent_undo')
-    let undoDir = stdpath('data') . '/undo'
+    let undoDir = expand(~/.vim/undo)
     call system('mkdir ' . undoDir)
     let &undodir = undoDir
     set undofile
