@@ -8,7 +8,6 @@ starship init fish | source
 alias fd fdfind
 alias ip "ip --color=auto"
 alias less "less --ignore-case --RAW-CONTROL-CHARS"
-alias ls "ls -l --human-readable --group-directories-first"
 
 # Disable the fish greeting
 set -gx fish_greeting
