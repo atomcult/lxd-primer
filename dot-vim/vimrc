@@ -1,0 +1,55 @@
+call plug#begin()
+
+Plug 'tpope/vim-sensible'
+
+" Appearance
+Plug 'dracula/vim'
+Plug 'vim-airline/vim-airline'
+
+call plug#end()
+
+
+colo dracula
+
+let g:airline_theme = 'dracula'
+let g:airline_powerline_fonts = 0
+
+set termguicolors
+set number
+set showcmd
+
+set ignorecase
+set smartcase
+set hlsearch
+set nostartofline
+
+set foldmethod=indent
+set foldnestmax=2
+
+set showtabline=2
+set timeoutlen=500
+
+set spelllang=en_us
+
+set shiftwidth=4
+set softtabstop=4
+set tabstop=4
+set expandtab
+
+" Set up persistent undo
+if has('persistent_undo')
+    let undoDir = stdpath('data') . '/undo'
+    call system('mkdir ' . undoDir)
+    let &undodir = undoDir
+    set undofile
+endif
+
+nnoremap <Space> za
+
+" ^l to unhighlight last search
+if maparg('<C-L>', 'n') ==# ''
+    nnoremap <silent> <C-L> :nohlsearch<C-R>=has('diff')?'<Bar>diffupdate':''<CR><CR><C-L>
+endif
+
+let mapleader=","
+nnoremap <Leader>rtw :%s/\s\+$//e<CR>
