@@ -160,11 +160,10 @@ devices:
   # It's convenient to have some basic setup common to all your containers.
   # Be wary of contamination! Half the point of containers is to have a clean environment to test.
   #
-  # For my setup, I have a clean version of my configuration files (fish, vim,
-  #     git, etc.) in `~/.config/lxd/<profile>` and a working version in
-  #     `~/.local/share/lxd/<profile>`. If the working version ever gets too cluttered,
-  #     I can just nuke it and replace with the clean copies. Note that I've chosen these
-  #     directories arbitrarily.
+  # For my setup, I have a clean version of my configuration files (fish, git, etc.)
+  #     in `~/.config/lxd/<profile>` and a working version in `~/.local/share/lxd/<profile>`.
+  #     If the working version ever gets too cluttered, I can just nuke it and replace with
+  #     the clean copies. Note that I've chosen these directories arbitrarily.
   dot-config:
     path: /root/.config
     source: /home/jbrock/.local/share/lxd/snapcraft
