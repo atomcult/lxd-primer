@@ -236,7 +236,6 @@ description: Snapcraft 7 Build Container
 devices:
   dot-config:
     path: /home/jbrock/.config
-    readonly: "true"
     source: /home/jbrock/.local/share/lxd/build
     type: disk
   eth0:
