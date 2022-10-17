@@ -1,11 +1,11 @@
 #!/bin/fish
 
+set -gx NNN_OPTS "edag"
+
 function n --wraps nnn --description 'support nnn quit and change directory'
     # Block nesting of nnn in subshells
     if test -n "$NNNLVL"
         if [ (expr $NNNLVL + 0) -ge 1 ]
-            # echo "nnn is already running"
-            # return
             exit
         end
     end
