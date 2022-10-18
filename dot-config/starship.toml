@@ -1,7 +1,7 @@
 "$schema" = 'https://starship.rs/config-schema.json'
 
 add_newline = true
-format = '[\[LXD\]](bold) $all λ ''
+format = '[\[LXD\]](bold) $all λ '
 right_format = "$character"
 
 [character]
