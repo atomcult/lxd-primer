@@ -17,9 +17,11 @@ fi
 cp "${HERE}"/dot-config/* "${XDG_CONFIG_HOME:-$HOME/.config}" \
     --verbose \
     --recursive \
-    --interactive
+    --interactive \
+    "$@"
 
 cp "${HERE}"/dot-vim/* "$HOME/.vim" \
     --verbose \
     --recursive \
-    --interactive
+    --interactive \
+    "$@"
