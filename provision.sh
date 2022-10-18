@@ -25,3 +25,5 @@ cp "${HERE}"/dot-vim/* "$HOME/.vim" \
     --recursive \
     --interactive \
     "$@"
+
+"$HOME/.config/bin/vim-init.sh"
