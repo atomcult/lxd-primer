@@ -2,9 +2,9 @@
 
 * [Getting Started](#getting-started)
 * [Remotes](#remotes)
-* [Profiles (Annotated)](#profiles-(annotated))
+* [Profiles](#profiles-(annotated))
   * [Basics](#basics)
-  * [Examples](#examples)
+  * [Examples (Annotated)](#examples)
 * [Aliases](#aliases)
 
 ## Getting Started
@@ -55,7 +55,7 @@ You can check all the remotes that are set up with
 lxc remote ls
 ```
 
-## Profiles (Annotated)
+## Profiles
 
 Profiles allow you to set up a container with a default set of instance configuration values as if you had set them manually with `lxd config ...`. As such, any configuration that can be set through the `lxd config` facilities also works with profiles. Additionally, `cloud-init` allows for first-time setup when the container is created.
 
@@ -103,7 +103,7 @@ Once you see the message
 ```
 cloud-init has finished setting up. You can exit with `^a q`.
 
-### Examples
+### Examples (Annotated)
  - [Profile as Root](https://github.com/atomcult/lxd-primer/blob/main/profiles/00_snapcraft.yaml)
  - [Profile as a Non-root User](https://github.com/atomcult/lxd-primer/blob/main/profiles/01_nonroot.yaml)
 
