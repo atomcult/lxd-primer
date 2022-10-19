@@ -85,10 +85,10 @@ devices:
     source: /media/WORK
     type: disk
 
-  # Bring in snaps, and any other projects
+  # Bring in snaps and any other projects
   snaps:
     path: /root/lab
-    source: /home/jbrock/lab/snaps
+    source: /home/jbrock/lab
     type: disk
 
   # Bring in ssh keys readonly, to be able to push changes in git

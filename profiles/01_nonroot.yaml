@@ -61,7 +61,7 @@ devices:
     type: disk
   snaps:
     path: /home/jbrock/lab
-    source: /home/jbrock/lab/snaps
+    source: /home/jbrock/lab
     type: disk
   ssh-config:
     path: /home/jbrock/.ssh
