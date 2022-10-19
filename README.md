@@ -4,8 +4,7 @@
 * [Remotes](#remotes)
 * [Profiles (Annotated)](#profiles-(annotated))
   * [Basics](#basics)
-  * [Profile as Root](#profile-as-root)
-  * [Profile as a Non-root User](#profile-as-a-non-root-user)
+  * [Examples](#examples)
 * [Aliases](#aliases)
 
 ## Getting Started
