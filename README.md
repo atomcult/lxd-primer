@@ -2,9 +2,9 @@
 
 * [Getting Started](#getting-started)
 * [Remotes](#remotes)
-* [Profiles](#profiles-(annotated))
+* [Profiles](#profiles)
   * [Basics](#basics)
-  * [Examples (Annotated)](#examples)
+  * [Examples (Annotated)](#examples-annotated)
 * [Aliases](#aliases)
 
 ## Getting Started
