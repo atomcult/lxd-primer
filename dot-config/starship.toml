@@ -25,7 +25,7 @@ disabled = true
 #   in the top level format (replacing ${custom.lxd_host}), and uncomment the line
 #   below
 # disabled = true
-command = "sed '2!d' /proc/asound/oss/sndstat | cut -d' ' -f3 | tr -d '\n'"
+command = "sed '2!d' /proc/asound/oss/sndstat | cut -d' ' -f3"
 when = "test -f /proc/asound/oss/sndstat"
 style = "bold dimmed green"
 format = "[.$output]($style) in"
