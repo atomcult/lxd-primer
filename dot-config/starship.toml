@@ -1,7 +1,7 @@
 "$schema" = 'https://starship.rs/config-schema.json'
 
 add_newline = true
-format = '[\[LXD\]](bold) $all $character'
+format = '[\[LXD\]](bold) $username$hostname${custom.lxd_host} $all $character'
 
 [character]
 success_symbol = '[λ]()'
@@ -15,9 +15,18 @@ format = "[$user]($style)@"
 
 [hostname]
 ssh_only = false
+format = "[$hostname]($style)"
 
 [container]
 disabled = true
+
+[custom.lxd_host]
+# If you want the more robust solution, just hardcode the machine's hostname
+# command = "echo <your-hostname>"
+command = "sed '2!d' /proc/asound/oss/sndstat | cut -d' ' -f3 | tr -d '\n'"
+when = "test -f /proc/asound/oss/sndstat"
+style = "bold dimmed green"
+format = "[.$output]($style) in"
 
 
 ###   Starship Plain-Text Preset   #############################################
