@@ -1,0 +1,41 @@
+config: {}
+  # Map host user $(id -u) to the root user in the container.
+  # This means that files from the host system that are mounted into
+  #   the container will appear as though they belong to root (you).
+  #   This also means that any files you create as root within the
+  #   container will be owned by your user on the host system.
+
+description: Default LXD profile
+
+devices:
+  # Enable networking using the default LXD bridge lxdbr0
+  eth0:
+    name: eth0
+    network: lxdbr0
+    type: nic
+
+  # Define the rootfs, uses the default storage pool
+  root:
+    path: /
+    pool: default
+    type: disk
+
+  # Bring in sensitive files.
+  # For me, this is a tomb volume that contains things like my snapcraft credentials.
+  secrets:
+    path: /root/secrets
+    source: /media/WORK
+    type: disk
+
+  # Bring in snaps and any other projects
+  snaps:
+    path: /root/work
+    source: /home/jbrock/work
+    type: disk
+
+  # Bring in ssh keys readonly, to be able to push changes in git
+  ssh-config:
+    path: /root/.ssh
+    readonly: "true"
+    source: /home/jbrock/.ssh
+    type: disk

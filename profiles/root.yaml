@@ -1,0 +1,7 @@
+config:
+  # Map host user $(id -u) to the root user in the container.
+  # This means that files from the host system that are mounted into
+  #   the container will appear as though they belong to root (you).
+  #   This also means that any files you create as root within the
+  #   container will be owned by your user on the host system.
+  raw.idmap: both 1000 0

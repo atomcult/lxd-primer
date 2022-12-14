@@ -1,0 +1,2 @@
+config:
+  raw.idmap: both 1000 1000
