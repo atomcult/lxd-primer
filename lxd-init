@@ -97,6 +97,14 @@ check_value() {
   [ -z "$opts" ] && is_flag "$2" && error "Missing value for argument: $1"
 }
 
+eval_path() {
+  if [ "${1%"${1#@/}"}" = "@/" ]; then
+    echo "${HERE}/${1#@/}"
+  else
+    echo "$1"
+  fi
+}
+
 parse() {
   while [ $# -gt 0 ]; do
     if ! is_flag "$1"; then
@@ -134,7 +142,7 @@ parse() {
           ;;
         -s | --script)
           check_value "$flag" "$2"
-          OPT_SCRIPT="$2"
+          OPT_SCRIPT="$(eval_path "$2")"
           shift
           ;;
         --no-script)
@@ -142,7 +150,7 @@ parse() {
           ;;
         -c | --config-dir)
           check_value "$flag" "$2"
-          OPT_CONFIG_DIR="$2"
+          OPT_CONFIG_DIR="$(eval_path "$2")"
           shift
           ;;
         --no-config-dir)
@@ -206,7 +214,7 @@ main() {
 
   # TODO: if OPT_USER doesn't exist, create the user
   [ "$OPT_USER" = "root" ] || [ "$OPT_USER" = "ubuntu" ] || \
-    error "Sorry! The code to create custom usernames is under construction!"
+    error "Sorry! The code to create custom users is under construction!"
 
   # Install configuration files
   if [ -n "$OPT_CONFIG_DIR" ]; then
