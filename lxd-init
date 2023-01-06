@@ -168,7 +168,7 @@ parse() {
           exit 0
           ;;
         --dependencies)
-          echo "which\nrealpath"
+          printf "which\nrealpath"
           exit 0
           ;;
         *)
@@ -213,6 +213,8 @@ main() {
   parse "$@"
 
   # TODO: if OPT_USER doesn't exist, create the user
+  # FIXME: this check only makes sense on ubuntu images, need to check /etc/passwd
+  #        in the container to see if a new user needs to be created
   [ "$OPT_USER" = "root" ] || [ "$OPT_USER" = "ubuntu" ] || \
     error "Sorry! The code to create custom users is under construction!"
 
