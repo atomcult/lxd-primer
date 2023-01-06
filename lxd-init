@@ -49,7 +49,7 @@ USAGE: $(basename "$0") [OPTIONS..] <instance>
 
 OPTIONS:
   -R, --root             Setup as root in the container
-  -u, --user             Setup as user with current username in the container
+  -U, --user             Setup as user with current username in the container
   --username NAME        Setup as user with username NAME in the container
   -s, --script FILE      Run script FILE in the container
   --no-script
@@ -133,6 +133,7 @@ parse() {
           # FIXME: Change this back once changing the username
           #        or creating users is supported
           # OPT_USER="${USER:-"$(whoami)"}"
+          echo "Currently only the 'ubuntu' user in ubuntu containers is supported. Sorry!"
           OPT_USER="ubuntu"
           ;;
         --username)
