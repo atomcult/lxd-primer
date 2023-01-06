@@ -1,5 +1,8 @@
 # LXD: An Opinionated Primer
 
+<!-- TODO: Comparison of methods for initializing LXD containers (e.g. cloud-init) -->
+<!-- TODO: Create a branch for the old cloud-init configs, and link to it -->
+
 * [Getting Started](#getting-started)
 * [Remotes](#remotes)
 * [Profiles](#profiles)
@@ -79,6 +82,11 @@ lxc profile copy <profile> <new-profile>
 Once created, a profile has can be set or viewed one property at a time, but it's usually easier to edit the entire YAML configuration with
 ```
 lxc profile edit <profile>
+```
+
+or better yet, import a stock config that you maintain in, e.g., a git repo:
+```
+lxc profile edit <profile> < <profile.yaml>
 ```
 
 You can verify your work with

@@ -1,0 +1,239 @@
+#!/bin/sh -e
+# vim: sw=2
+
+readonly SEMVER="0.1.0"
+
+basename() {
+    dir=${1%"${1##*[!/]}"}
+    dir=${dir##*/}
+    printf '%s\n' "${dir:-/}"
+}
+
+# TODO: dirname should use basename
+dirname() {
+  dir=${1:-.}
+  dir=${dir%%"${dir##*[!/]}"}
+
+  [ "${dir##*/*}" ] && dir=.
+
+  dir=${dir%/*}
+  dir=${dir%%"${dir##*[!/]}"}
+
+  printf '%s\n' "${dir:-/}"
+}
+
+# shellcheck disable=SC2155
+readonly HERE="$(dirname "$(realpath "$0")")"
+
+OPT_INSTANCE=""
+OPT_USER="root"
+OPT_SCRIPT=""
+OPT_CONFIG_DIR=""
+OPT_LOGIN=""
+
+is_falsy() {
+  [ -z "$1" ] || [ "$1" = "false" ] || [ "$1" = "0" ]
+}
+
+dbg() {
+   is_falsy "$DEBUG" || eval "echo $1 = \${$1}"
+}
+
+print_version() {
+  echo "lxd-init ${SEMVER}"
+}
+
+print_help() {
+  cat << EOF
+USAGE: $(basename "$0") [OPTIONS..] <instance>
+
+OPTIONS:
+  -R, --root             Setup as root in the container
+  -u, --user             Setup as user with current username in the container
+  --username NAME        Setup as user with username NAME in the container
+  -s, --script FILE      Run script FILE in the container
+  --no-script
+  -c, --config-dir PATH  PATH from which to copy configs to the home directory
+  --no-config-dir
+  -l, --login            Open a shell once setup is complete
+
+  --dependencies         Print external utilities the script depends on
+  -h, --help             Print this help message.
+  -v, --version          Print version
+EOF
+}
+
+print_div() {
+  i=0
+  div=""
+  while [ $i -lt 75 ]; do
+    if [ $((i % 2)) -eq 0 ]; then
+      div="${div}-"
+    else
+      div="${div} "
+    fi
+    i=$((i+1))
+  done
+
+  printf "\n%s\n\n" "$div"
+}
+
+error() {
+  printf "\nERROR:\n  %s\n" "$*" 1>&2
+  print_div 1>&2
+  print_help 1>&2
+  exit 1
+}
+
+is_flag() {
+  [ "${1%"${1#?}"}" = "-" ]
+}
+
+is_long_opt() {
+  [ "${1%"${1#??}"}" = "--" ]
+}
+
+check_value() {
+  [ -z "$opts" ] && is_flag "$2" && error "Missing value for argument: $1"
+}
+
+parse() {
+  while [ $# -gt 0 ]; do
+    if ! is_flag "$1"; then
+      [ -z "$OPT_INSTANCE" ] || error "Too many positional arguments: $1"
+      OPT_INSTANCE="$1"
+      shift
+      continue
+    fi
+
+    if is_long_opt "$1"; then
+      unset opts
+      flag="$1"
+    else
+      opts="${1#-}"
+      tail="${opts#?}"
+      flag="-${opts%"$tail"}"
+      opts="$tail"
+    fi
+
+    while
+      case "$flag" in
+        -R | --root)
+          OPT_USER="root"
+          ;;
+        -U | --user)
+          # FIXME: Change this back once changing the username
+          #        or creating users is supported
+          # OPT_USER="${USER:-"$(whoami)"}"
+          OPT_USER="ubuntu"
+          ;;
+        --username)
+          check_value "$flag" "$2"
+          OPT_USER="$2"
+          shift
+          ;;
+        -s | --script)
+          check_value "$flag" "$2"
+          OPT_SCRIPT="$2"
+          shift
+          ;;
+        --no-script)
+          unset OPT_SCRIPT
+          ;;
+        -c | --config-dir)
+          check_value "$flag" "$2"
+          OPT_CONFIG_DIR="$2"
+          shift
+          ;;
+        --no-config-dir)
+          unset OPT_CONFIG_DIR
+          ;;
+        -l | --login)
+          OPT_LOGIN=1
+          ;;
+        -h | --help)
+          print_help
+          exit 0
+          ;;
+        -v | --version)
+          print_version
+          exit 0
+          ;;
+        --dependencies)
+          echo "which\nrealpath"
+          exit 0
+          ;;
+        *)
+          error "Unrecognized option: $flag"
+          ;;
+      esac
+
+      [ -n "$opts" ]
+    do
+      tail="${opts#?}"
+      flag="-${opts%"$tail"}"
+      opts="$tail"
+    done
+
+    shift
+  done
+
+  dbg OPT_INSTANCE
+  dbg OPT_USER
+  dbg OPT_SCRIPT
+  dbg OPT_CONFIG_DIR
+
+  [ -n "$OPT_INSTANCE" ] || error "Please specify the instance"
+}
+
+uid() {
+  user="${1:-"$USER"}"
+  while IFS=':' read -r uname x uid etc; do
+    if [ "$uname" = "$user" ]; then
+      echo "$uid"
+    fi
+  done
+}
+
+main() {
+  # TODO: options to launch the container?
+
+  # FIXME: invoking `lxd` is super slow, find another way to verify it's installed
+  # lxd --version 1>/dev/null || error "LXD is not installed or not in the current PATH"
+  which lxd 1>/dev/null || error "LXD is not installed or not in the current PATH"
+
+  parse "$@"
+
+  # TODO: if OPT_USER doesn't exist, create the user
+  [ "$OPT_USER" = "root" ] || [ "$OPT_USER" = "ubuntu" ] || \
+    error "Sorry! The code to create custom usernames is under construction!"
+
+  # Install configuration files
+  if [ -n "$OPT_CONFIG_DIR" ]; then
+    [ -d "$(realpath "$OPT_CONFIG_DIR")" ] || \
+      error "Configuration directory doesn't exist: $OPT_CONFIG_DIR"
+    home="$(lxc exec "$OPT_INSTANCE" -- su -l "$OPT_USER" -c "echo \$HOME" 2>/dev/null)"
+    lxc file push -rp "$OPT_CONFIG_DIR"/* "${OPT_INSTANCE}/${home#/}" 2>/dev/null || true
+    lxc file push -rp "$OPT_CONFIG_DIR"/.[!.]* "${OPT_INSTANCE}/${home#/}" 2>/dev/null || true
+  fi
+
+  # Setup ID mapping
+  cuid="$(lxc exec "$OPT_INSTANCE" -- cat /etc/passwd | uid "$OPT_USER")"
+  lxc config set "$OPT_INSTANCE" raw.idmap "both $(uid "$USER" < /etc/passwd) $cuid"
+
+  # FIXME: respect the shebang (if it exists) of the script
+  if [ -n "$OPT_SCRIPT" ]; then
+    [ -f "$(realpath "$OPT_SCRIPT")" ] || \
+      error "Script doesn't exist: $OPT_SCRIPT"
+    lxc exec "$OPT_INSTANCE" -- su -l "$OPT_USER" -c sh < "$OPT_SCRIPT"
+  fi
+
+  # FIXME: Only restart if it's necessary
+  # Restart to let changes (i.e. ID mapping) take effect
+  lxc restart "$OPT_INSTANCE"
+
+  is_falsy "$OPT_LOGIN" || \
+    exec lxc exec "$OPT_INSTANCE" -- su -l "$OPT_USER"
+}
+
+main "$@"

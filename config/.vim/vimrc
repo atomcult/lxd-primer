@@ -14,7 +14,11 @@ colo dracula
 let g:airline_theme = 'dracula'
 let g:airline_powerline_fonts = 0
 
-set termguicolors
+" foot term specific stuff:
+" set termguicolors
+" set t_8f=[38:2::%lu:%lu:%lum
+" set t_8b=[48:2::%lu:%lu:%lum
+
 set number
 set showcmd
 

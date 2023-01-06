@@ -23,13 +23,13 @@ devices:
   # Bring in sensitive files.
   # For me, this is a tomb volume that contains things like my snapcraft credentials.
   secrets:
-    path: /root/secrets
+    path: /secrets
     source: /media/WORK
     type: disk
 
   # Bring in snaps and any other projects
   snaps:
-    path: /root/work
+    path: /work
     source: /home/jbrock/work
     type: disk
 
