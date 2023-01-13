@@ -42,8 +42,7 @@ install_packages() {
   # shellcheck disable=SC2086
   sudo apt install -y $pkgs
 
-  # sudo snap install --channel=latest/edge snapcraft --classic
-  sudo snap install /work/snapcraft/*.snap --classic --dangerous
+  sudo snap install --edge --classic snapcraft
   # sudo snap set system experimental.parallel-instances=true
   # sudo snap install --name=snapcraft_6 --channel=6.x/stable snapcraft --classic
 
