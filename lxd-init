@@ -4,9 +4,9 @@
 readonly SEMVER="0.1.0"
 
 basename() {
-    dir=${1%"${1##*[!/]}"}
-    dir=${dir##*/}
-    printf '%s\n' "${dir:-/}"
+  dir=${1%"${1##*[!/]}"}
+  dir=${dir##*/}
+  printf '%s\n' "${dir:-/}"
 }
 
 # TODO: dirname should use basename
@@ -36,7 +36,7 @@ is_falsy() {
 }
 
 dbg() {
-   is_falsy "$DEBUG" || eval "echo $1 = \${$1}"
+  is_falsy "$DEBUG" || eval "echo $1 = \${$1}"
 }
 
 print_version() {
@@ -169,7 +169,7 @@ parse() {
           exit 0
           ;;
         --dependencies)
-          printf "which\nrealpath"
+          printf "realpath"
           exit 0
           ;;
         *)
@@ -204,12 +204,28 @@ uid() {
   done
 }
 
+which() {
+  path="$PATH"
+  while [ -n "$path"  ]; do
+    current="${path%%:*}"
+    old_path="$path"
+    path="${path##"$current":}"
+
+    # If path == old_path, then there's no more colons,
+    #   so we have to zero out manually
+    [ "$path" = "$old_path"  ] && unset path
+
+    candidate="${current}/${1}"
+    [ -f "$candidate"  ] && [ -x "$candidate"  ] && echo "$candidate"
+  done
+}
+
 main() {
   # TODO: options to launch the container?
 
   # FIXME: invoking `lxd` is super slow, find another way to verify it's installed
   # lxd --version 1>/dev/null || error "LXD is not installed or not in the current PATH"
-  which lxd 1>/dev/null || error "LXD is not installed or not in the current PATH"
+  [ -n "$(which lxd)" ] || error "LXD is not installed or not in the current PATH"
 
   parse "$@"
 
