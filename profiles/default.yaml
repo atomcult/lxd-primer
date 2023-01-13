@@ -1,10 +1,4 @@
 config: {}
-  # Map host user $(id -u) to the root user in the container.
-  # This means that files from the host system that are mounted into
-  #   the container will appear as though they belong to root (you).
-  #   This also means that any files you create as root within the
-  #   container will be owned by your user on the host system.
-
 description: Default LXD profile
 
 devices:
@@ -33,9 +27,9 @@ devices:
     source: /home/jbrock/work
     type: disk
 
-  # Bring in ssh keys readonly, to be able to push changes in git
+  # Bring in ssh keys readonly to be able to push changes in git
   ssh-config:
     path: /root/.ssh
-    readonly: "true"
+    readonly: true
     source: /home/jbrock/.ssh
     type: disk
