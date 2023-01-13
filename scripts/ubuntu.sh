@@ -53,7 +53,7 @@ install_packages() {
 setup_vim() {
   curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
         https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
-  vim -T dumb -n -es -c PlugInstall -c qa
+  vim -es -u "$HOME/.vim/vimrc" -i NONE -c PlugInstall -c qa
 }
 
 check_environment
