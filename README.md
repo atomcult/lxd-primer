@@ -1,13 +1,15 @@
 # LXD: An Opinionated Primer
 
-<!-- TODO: Comparison of methods for initializing LXD containers (e.g. cloud-init) -->
-<!-- TODO: Create a branch for the old cloud-init configs, and link to it -->
+> **NOTICE**: I've moved away from cloud-init to the lxd-init script provided
+> in this repository. You can still find the old version of the documentation
+> on the [cloud-init branch](https://github.com/atomcult/lxd-primer/tree/cloud-init).
+
 
 * [Getting Started](#getting-started)
+* [Using lxd-init](#using-lxd-init)
 * [Remotes](#remotes)
 * [Profiles](#profiles)
   * [Basics](#basics)
-  * [Examples (Annotated)](#examples-annotated)
 * [Aliases](#aliases)
 
 ## Getting Started
@@ -36,6 +38,31 @@ lxc rm jammy
 lxc ls
 ```
 
+## Using lxd-init
+```sh
+# Put the script somewhere in your path
+ln -s "$PWD/lxd-init $HOME/.local/bin"
+
+# Edit the default profile to meet your needs and import
+lxc profile edit default < profiles/default.yaml
+
+# Launch a container with the default profile
+lxc launch ubuntu:20.04 <my-container>
+
+# Initialize
+lxd-init --root --config @/config --script @/scripts/ubuntu.sh --login <my-container>
+```
+Let's break that last command down into components to see what it's doing.
+`--root` tells the script that you'd like to run as root in the container. This makes sure that your current user is mapped to root inside the container. This mostly has effects things like file ownership and permissions. Any files you create within the container will actually be owned by your UID outside the container. The alternative to this is to use the `--user` or `--username <name>` flags which optionally create or use an already existing user within the container (and perform the aforementioned mapping). A container that's already been initialized can have its mapping switched at any time with any of these flags.
+
+The `--config <dir>` flag takes a directory and simply copies all of the contents of that directory to the home of the currently configured user (as determined by the user mapping). You'll notice that in the example, the path given starts with `@/`. This is simply a shorthand for the real directory (meaning the directory that contains the actual script, not just a symlink to it) that the script resides in.
+
+As you might guess, `--script <path>` indicates a script that you'd like to run within the container. As of this writing, this script **must** be sh/dash compliant, as the script is simply piped into that container's version of sh. This has a great deal more flexibility than other instantiation methods, like cloud-init, because you can use logic to determine what actions should be taken. In the `ubuntu.sh` script, for example, it determines what packages to install based on the version of Ubuntu. There's also a good opportunity for script composition, since you can simple source other scripts you have written.
+
+Finally, `--login` just says to open up a shell as the configured user once all the initialization is done.
+
+This script is under continual development, so check back to see what new features have been added. If you have a feature request, feel free to open an issue or PR!
+
 ## Remotes
 
 The 2 remotes you're likely to see:
@@ -51,8 +78,6 @@ The 2 remotes you're likely to see:
   - images:archlinux/current
   - etc.
 
-By default, images from the `ubuntu` remote support cloud-init. This is not the case for other remotes. AFAIK you can choose a cloud variant of images provided by the `images` remote, that do include cloud-init support.
-
 You can check all the remotes that are set up with
 ```sh
 lxc remote ls
@@ -60,12 +85,11 @@ lxc remote ls
 
 ## Profiles
 
-Profiles allow you to set up a container with a default set of instance configuration values as if you had set them manually with `lxd config ...`. As such, any configuration that can be set through the `lxd config` facilities also works with profiles. Additionally, `cloud-init` allows for first-time setup when the container is created.
+Profiles allow you to set up a container with a default set of instance configuration values as if you had set them manually with `lxd config ...`. As such, any configuration that can be set through the `lxd config` facilities also works with profiles.
 
 For more information about configuring profiles, refer to the following documents. There are *many, many* things that can be configured that are not touched upon in this primer.
  - [LXD Profile Configuration Docs](https://linuxcontainers.org/lxd/docs/master/profiles/)
  - [LXD Instance Configuration Docs](https://linuxcontainers.org/lxd/docs/master/instances/)
- - [LXD cloud-init Docs](https://linuxcontainers.org/lxd/docs/master/cloud-init/)
 
 ### Basics
 
@@ -96,24 +120,8 @@ lxc profile show <profile>
 
 The profile can now be used when launching an instance (potentially in combination with others):
 ```
-lxc launch ubuntu:22.04 -p <profile>[,<profile-2>,...] <container-name>
+lxc launch ubuntu:22.04 -p <profile> [-p <profile-2> ...] <container-name>
 ```
-
-If your profile includes cloud-init, it will take extra time for everything to be setup, since it is run after the container is initialized. You can check the console output with the following command:
-```
-lxc console <container-name>
-```
-
-Once you see the message
-```
-[  OK  ] Finished Execute cloud user/final scripts.
-[  OK  ] Reached target Cloud-init target.
-```
-cloud-init has finished setting up. You can exit with `^a q`.
-
-### Examples (Annotated)
- - [Profile as Root](https://github.com/atomcult/lxd-primer/blob/main/profiles/00_snapcraft.yaml)
- - [Profile as a Non-root User](https://github.com/atomcult/lxd-primer/blob/main/profiles/01_nonroot.yaml)
 
 ## Aliases
 It can be convenient to have aliases, especially when shelling into a container as a non-root user.
@@ -133,7 +141,7 @@ Description:
  ...
 ```
 
-By slightly modifying this, we can have an alias that logs us in as the user we created in cloud-init:
+By slightly modifying this, we can have an alias that logs us in as a non-root user:
 ```
 lxc alias add sh "exec @ARGS@ -- su -l <username>"
 ```
@@ -142,6 +150,8 @@ Now we can get a non-root shell with (for those containers that have a user name
 ```
 lxc sh <container>
 ```
+
+**Note**: In Ubuntu LXD images there's an `ubuntu` user by default, so you shouldn't have to create a user to be non-root.
 
 # To Do
  - [ ] Add specific examples for LXD setups
