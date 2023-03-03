@@ -46,7 +46,7 @@ install_packages() {
   # sudo snap set system experimental.parallel-instances=true
   # sudo snap install --name=snapcraft_6 --channel=6.x/stable snapcraft --classic
 
-  sudo snap install starship
+  sudo snap install --edge starship
 }
 
 setup_vim() {
