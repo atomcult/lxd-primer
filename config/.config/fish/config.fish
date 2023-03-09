@@ -2,7 +2,8 @@
 
 fish_vi_key_bindings
 
-starship init fish | source
+# NOTE: invoke starship without confinement until the snap is fixed
+/snap/starship/current/bin/starship init fish | source
 
 # Aliases
 alias fd fdfind
@@ -13,7 +14,7 @@ alias less "less --ignore-case --RAW-CONTROL-CHARS"
 set -gx fish_greeting
 
 # Add scripts path
-set -gx --append PATH "$HOME/.config/bin"
+set -gx --append PATH "$HOME/.local/bin"
 
 # Setup the defaults
 set -gx EDITOR vim
