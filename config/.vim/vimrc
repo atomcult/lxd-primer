@@ -2,6 +2,7 @@ call plug#begin()
 
 Plug 'tpope/vim-sensible'
 Plug 'tpope/vim-commentary'
+Plug 'tpope/vim-fugitive'
 
 " Appearance
 Plug 'dracula/vim'
